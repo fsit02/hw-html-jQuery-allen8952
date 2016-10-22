@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>LocalStorage Lab</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<style type="text/css">
+body {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 1.125em;
+	margin: 20px;
+}
+
+h1 {
+	text-align: center;
+	border-bottom: 2px solid #009;
+	margin-bottom: 50px;
+}
+
+fieldset {
+	margin: 1.5em 0 0 0;
+	padding: 0;
+	border: 1px solid #CCC;
+}
+
+legend {
+	margin-left: 1em;
+	color: #009;
+	font-weight: bold;
+}
+
+label {
+	float: left;
+	width: 10em;
+	margin-right: 1em;
+}
+
+fieldset ol {
+	list-style: none;
+	padding-top: 3px;
+	padding-left: 2em;
+	padding-bottom: 3px;
+}
+
+fieldset li {
+	line-height: 24px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+fieldset li input.formFields {
+	line-height: 24px;
+	height: 24px;
+	border: 1px solid #CCC;
+}
+
+fieldset .submit {
+	border-style: none;
+	width: 10em;
+	height: 3em;
+	margin: -1em auto 1em 18em;
+}
+</style>
+
+
+
+</head>
+<body>
+
+	<H1>實作 HTML5 的 LocalStorage 功能</H1>
+	<p>輸入表單資料，不要按下「Send」送出，關閉瀏覽器，然後重新回到本頁，自動回復先前輸入的內容。</p>
+
+	<form method="post" action="http://exec.hostzi.com/echo.php" >
+
+		<fieldset>
+			<legend>Contact Details</legend>
+			<ol>
+				<li><label for="txtName">Name:</label> <input id="txtName"
+					name="txtName" type="text" class="formFields"/></li>
+				<li><label for="txtEmail">Email address:</label> <input
+					id="txtEmail" name="txtEmail" type="text" class="formFields" /></li>
+				<li><label for="txtPhone">Telephone:</label> <input
+					id="txtPhone" name="txtPhone" type="text" class="formFields" /></li>
+			</ol>
+
+			<input id="btnSubmit" name="btnSubmit" type="submit" class="submit"
+				value="Send" />
+
+		</fieldset>
+
+	</form>
+
+<span id="test"></span>
+
+<script>
+
+	var doCHange = function doChange() {
+		document.getElementById("test").innerHTML += this.name + ":" + this.value + "<br>";//測試用
+		localStorage.setItem(this.name, this.value);
+	}
+	//doChange函數是在你只要有輸入資料於text內localStorage會自動幫你存入browsers內,儲存起來的資料不會消失,除非自行刪除
+	//否則會一直存ㄡ...
+
+	
+	// document.getElementById("txtName").onkeyup = doChange;
+	// document.getElementById("txtEmail").onkeyup = doChange;
+	// document.getElementById("txtPhone").onkeyup = doChange;
+	$(document).ready(function(){
+    	$("#txtName").keyup(doCHange);
+    	$("#txtEmail").keyup(doCHange);
+    	$("#txtPhone").keyup(doCHange);
+    	
+});//觀查程式輸入每一個字元時的狀態
+
+	function readAndShow() {
+		if (localStorage["txtName"]){
+		    $("#txtName").val(localStorage["txtName"]);
+			// document.getElementById("txtName").value = localStorage["txtName"];
+		}
+		if (localStorage["txtEmail"]){
+			$("#txtEmail").val(localStorage["txtEmail"]);
+			// document.getElementById("txtEmail").value = localStorage["txtEmail"];
+		}
+		if (localStorage["txtPhone"]){
+			$("#txtPhone").val(localStorage["txtPhone"]);
+			// document.getElementById("txtPhone").value = localStorage["txtPhone"];
+		}
+	}
+	
+			//readAndShow函數在讀取上一次開啟此網頁時是否有存取資料,如果上一次填寫完畢沒有send出去,text會自動顯示
+			//上次未送出資料時的字元,反之則無
+			
+	document.forms[0].onsubmit = function () { localStorage.clear(); }; //一旦送出資料ㄝ，頁面上text的內容會被清除
+																		//再一次開啟網頁text.value裡便不會有字元
+	
+	window.onload = readAndShow; //程式一進入先跑readAndShow函數 
+
+</script>
+
+</body>
+</html>
+<!-- 陳勃宏 改寫-->
